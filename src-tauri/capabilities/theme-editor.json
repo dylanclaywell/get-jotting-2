@@ -1,0 +1,24 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "theme-editor",
+  "description": "Capability for the theme editor window",
+  "windows": ["theme-editor"],
+  "permissions": [
+    "core:default",
+    "opener:default",
+    "dialog:default",
+    "sql:default",
+    "sql:allow-execute",
+    "fs:default",
+    "fs:allow-read-dir",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$APPLOCALDATA" }, { "path": "$APPLOCALDATA/**" }]
+    },
+    "core:window:allow-close",
+    {
+      "identifier": "core:window:allow-close",
+      "allow": ["theme-editor"]
+    }
+  ]
+}
