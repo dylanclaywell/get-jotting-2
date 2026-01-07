@@ -5,13 +5,16 @@ import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 
 import themeEditorColorPicker from '../components/themeEditorColorPicker.vue'
 import themeEditorOption from '../components/themeEditorOption.vue'
-import { Theme, themeSchema } from '../validation/theme'
+import { Theme, themeOptionMapping, themeSchema } from '../validation/theme'
 import db from '../services/db'
 import { getCurrentTheme } from '../services/theme'
 import { Nullish } from '../types/nullish'
 import { buildTheme } from '../utils/buildTheme'
+import { ChevronDown } from 'lucide-vue-next'
 
 const activeButton = ref('activeTab')
+
+const selectRef = ref<HTMLSelectElement | null>(null)
 
 const editingTheme = ref<Theme>(buildTheme({}))
 
@@ -89,6 +92,12 @@ async function onSave() {
   currentWindow.close()
 }
 
+function onThemeSelectClick(event: MouseEvent) {
+  if (selectRef.value && event.target !== selectRef.value) {
+    selectRef.value.click()
+  }
+}
+
 onMounted(async () => {
   await loadThemes()
   const currentTheme = await getCurrentTheme()
@@ -98,26 +107,39 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen overflow-hidden">
-    <div class="flex border-b">
-      <select v-model="selectedTheme">
-        <option
-          v-for="theme in themes"
-          :key="theme.filename"
-          :value="theme.filename"
+    <div class="flex border-b p-2">
+      <div class="relative" @click="onThemeSelectClick">
+        <select
+          ref="selectRef"
+          v-model="selectedTheme"
+          class="border rounded px-2 pr-6 py-1 appearance-none"
         >
-          {{ theme.name }}
-        </option>
-      </select>
+          <option
+            v-for="theme in themes"
+            :key="theme.filename"
+            :value="theme.filename"
+          >
+            {{ theme.name }}
+          </option>
+        </select>
 
-      <button class="cursor-pointer" @click="applyTheme">Apply</button>
+        <ChevronDown class="absolute right-2 top-1.5 w-4 pointer-events-none" />
+      </div>
+
+      <button
+        class="ml-2 cursor-pointer border-2 border-blue-200 hover:bg-blue-100 px-2 py-0 rounded-sm"
+        @click="applyTheme"
+      >
+        Apply
+      </button>
     </div>
     <div class="flex h-full">
       <div
-        class="flex flex-col items-start border-r overflow-y-auto h-[calc(100vh-6rem)]"
+        class="flex flex-col items-start border-r overflow-y-auto h-[calc(100vh-7.5rem)]"
       >
         <div v-for="key in Object.keys(editingTheme)" :key="key" class="w-full">
           <theme-editor-option
-            :text="key"
+            :text="themeOptionMapping[key as keyof Theme] ?? key"
             :isActive="isActive(key)"
             :optionKey="key"
             @click="setButton(key)"

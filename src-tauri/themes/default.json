@@ -1,6 +1,30 @@
 {
-  "activeTab": "#0000FF",
-  "inactiveTab": "#0000FF",
-  "editorBackground": "#0000FF",
-  "activeFile": "#0000FF"
+  "background": "#FFFFFF",
+  "editorBackground": "#FFFFFF",
+
+  "activeTabBackground": "#FFFFFFF",
+  "activeTabText": "#000000",
+  "activeTabHighlight": "#F6339A",
+
+  "inactiveTabBackground": "#FFFFFF",
+  "inactiveTabText": "#6B7280",
+
+  "editorText": "#000000",
+  "fileTreeBackground": "#FFFFFF",
+
+  "activeFileText": "#000000",
+  "activeFileBackground": "#BEDBFF",
+  "activeFileHoverBackground": "#BEDBFF",
+  "activeFolderText": "#000000",
+  "activeFolderBackground": "#BEDBFF",
+  "activeFolderHoverBackground": "#BEDBFF",
+
+  "inactiveFileText": "#000000",
+  "inactiveFileBackground": "#FFFFFF",
+  "inactiveFileHoverBackground": "#FFFFFF",
+  "inactiveFolderText": "#000000",
+  "inactiveFolderBackground": "#FFFFFF",
+  "inactiveFolderHoverBackground": "#FFFFFF",
+
+  "tabChangedIndicator": "#fbbf24"
 }

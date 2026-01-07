@@ -383,14 +383,14 @@ onMounted(async () => {
       </div>
     </div>
     <div class="w-full h-screen bg-gray-30">
-      <div class="w-full shadow-md bg-white flex h-12 pl-2 pt-2">
+      <div class="w-full shadow-md flex h-12 pl-2 pt-2">
         <div
           v-for="tab in tabs"
           :class="[
-            'w-fit first:border-l border-r border-gray-300 p-2 min-w-36 flex justify-between items-center',
+            'w-fit p-2 min-w-36 flex justify-between items-center',
             {
               activeTab: activeTab === tab.id,
-              'border-t': activeTab !== tab.id,
+              inactiveTab: activeTab !== tab.id,
             },
           ]"
           @click.left="activeTab = tab.id"
@@ -399,8 +399,7 @@ onMounted(async () => {
           <button
             @click="activeTab = tab.id"
             :class="{
-              'text-gray-400': activeTab !== tab.id,
-              'border-b-2 border-pink-500': tabChangeState[tab.id],
+              'border-b-2 tabChanged': tabChangeState[tab.id],
             }"
           >
             {{ tab.name }}
@@ -451,6 +450,28 @@ main {
 .activeTab {
   box-shadow: inset 0 3px 0 0
     var(--theme-active-tab-highlight, var(--color-pink-500));
-  background: var(--theme-active-tab);
+  background: var(--theme-active-tab-background);
+}
+
+.activeTab button {
+  color: var(--theme-active-tab-text, var(--color-black));
+}
+
+.inactiveTab {
+  background: var(--theme-inactive-tab-background);
+}
+
+.inactiveTab button {
+  color: var(--theme-inactive-tab-text, var(--color-gray-600));
+}
+
+.tabChanged {
+  border-bottom: 2px solid
+    var(--theme-tab-changed-indicator, var(--color-yellow-500));
+}
+
+textarea {
+  background: var(--theme-editor-background, var(--color-white));
+  color: var(--theme-editor-text, var(--color-black));
 }
 </style>

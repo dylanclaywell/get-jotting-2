@@ -20,7 +20,18 @@ export async function getCurrentTheme() {
       t12.value as inactiveFileText,
       t13.value as inactiveFileBackground,
       t14.value as inactiveFolderText,
-      t15.value as inactiveFolderBackground
+      t15.value as inactiveFolderBackground,
+      t16.value as tabChangedIndicator,
+      t17.value as activeTabText,
+      t18.value as inactiveTabText,
+      t19.value as activeFileHoverBackground,
+      t20.value as activeFolderHoverBackground,
+      t21.value as inactiveFileHoverBackground,
+      t22.value as inactiveFolderHoverBackground,
+      t23.value as activeFileHoverText,
+      t24.value as activeFolderHoverText,
+      t25.value as inactiveFileHoverText,
+      t26.value as inactiveFolderHoverText
     from theme_entry t0
     left outer join theme_entry t1 on t1.key = 'background'
     left outer join theme_entry t2 on t2.key = 'editorBackground'
@@ -36,7 +47,18 @@ export async function getCurrentTheme() {
     left outer join theme_entry t12 on t12.key = 'inactiveFileText'
     left outer join theme_entry t13 on t13.key = 'inactiveFileBackground'
     left outer join theme_entry t14 on t14.key = 'inactiveFolderText'
-    left outer join theme_entry t15 on t15.key = 'inactiveFolderBackground';
+    left outer join theme_entry t15 on t15.key = 'inactiveFolderBackground'
+    left outer join theme_entry t16 on t16.key = 'tabChangedIndicator'
+    left outer join theme_entry t17 on t17.key = 'activeTabText'
+    left outer join theme_entry t18 on t18.key = 'inactiveTabText'
+    left outer join theme_entry t19 on t19.key = 'activeFileHoverBackground'
+    left outer join theme_entry t20 on t20.key = 'activeFolderHoverBackground'
+    left outer join theme_entry t21 on t21.key = 'inactiveFileHoverBackground'
+    left outer join theme_entry t22 on t22.key = 'inactiveFolderHoverBackground'
+    left outer join theme_entry t23 on t23.key = 'activeFileHoverText'
+    left outer join theme_entry t24 on t24.key = 'activeFolderHoverText'
+    left outer join theme_entry t25 on t25.key = 'inactiveFileHoverText'
+    left outer join theme_entry t26 on t26.key = 'inactiveFolderHoverText';
   `)
   )[0]
 }

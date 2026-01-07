@@ -109,7 +109,7 @@ watch(isEditing, async (newVal) => {
       v-else
       :class="[
         'flex cursor-pointer items-center whitespace-nowrap px-2 w-full',
-        { 'bg-blue-200 hover:bg-blue-100': isActive },
+        { 'active-file': isActive, 'inactive-file': !isActive },
       ]"
       :style="buttonStyle"
       @contextmenu="handleFileContextMenu"
@@ -119,3 +119,28 @@ watch(isEditing, async (newVal) => {
     </button>
   </div>
 </template>
+
+<style scoped>
+.active-file {
+  background: var(--theme-active-file-background, var(--color-blue-100));
+  color: var(--theme-active-file-text, var(--color-black));
+}
+
+.active-file:hover {
+  background: var(--theme-active-file-hover-background, var(--color-blue-100));
+  color: var(--theme-active-file-hover-text, var(--color-black));
+}
+
+.inactive-file {
+  background: var(--theme-inactive-file-background, var(--color-white));
+  color: var(--theme-inactive-file-text, var(--color-black));
+}
+
+.inactive-file:hover {
+  background: var(
+    --theme-inactive-file-hover-background,
+    var(--color-gray-200)
+  );
+  color: var(--theme-inactive-file-hover-text, var(--color-black));
+}
+</style>

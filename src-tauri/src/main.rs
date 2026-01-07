@@ -74,6 +74,53 @@ fn main() {
             ",
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 5,
+            description: "add tab changed indicator theme entry",
+            sql: "
+                INSERT INTO theme_entry (key, value) VALUES
+                ('tabChangedIndicator', '#fbbf24')
+                ;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 6,
+            description: "add active and inactive tab text theme entries",
+            sql: "
+                INSERT INTO theme_entry (key, value) VALUES
+                ('activeTabText', '#000000'),
+                ('inactiveTabText', '#808080')
+                ;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 7,
+            description: "add active and inactive file and folder hover background theme entries",
+            sql: "
+                INSERT INTO theme_entry (key, value) VALUES
+                ('activeFileHoverBackground', '#bedbff'),
+                ('activeFolderHoverBackground', '#bedbff'),
+                ('inactiveFileHoverBackground', '#f0f0f0'),
+                ('inactiveFolderHoverBackground', '#f0f0f0')
+                ;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 8,
+            description: "add active and inactive file and folder hover text theme entries",
+            sql: "
+                INSERT INTO theme_entry (key, value) VALUES
+                ('activeFileHoverText', '#000000'),
+                ('activeFolderHoverText', '#000000'),
+                ('inactiveFileHoverText', '#000000'),
+                ('inactiveFolderHoverText', '#000000')
+                ;
+            ",
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

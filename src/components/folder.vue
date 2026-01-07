@@ -123,7 +123,10 @@ watch(isEditing, async (newVal) => {
     />
     <button
       v-else
-      class="flex cursor-pointer items-center whitespace-nowrap hover:bg-blue-100 w-full"
+      :class="[
+        'flex cursor-pointer items-center whitespace-nowrap w-full',
+        { 'active-folder': isOpen, 'inactive-folder': !isOpen },
+      ]"
       :style="buttonStyle"
       @contextmenu="handleFolderContextMenu"
       @click="emit('click', folder.id)"
@@ -135,3 +138,31 @@ watch(isEditing, async (newVal) => {
     </button>
   </div>
 </template>
+
+<style scoped>
+.active-folder {
+  background: var(--theme-active-folder-background, var(--color-blue-100));
+  color: var(--theme-active-folder-text, var(--color-black));
+}
+
+.active-folder:hover {
+  background: var(
+    --theme-active-folder-hover-background,
+    var(--color-blue-100)
+  );
+  color: var(--theme-active-folder-hover-text, var(--color-black));
+}
+
+.inactive-folder {
+  background: var(--theme-inactive-folder-background, var(--color-white));
+  color: var(--theme-inactive-folder-text, var(--color-black));
+}
+
+.inactive-folder:hover {
+  background: var(
+    --theme-inactive-folder-hover-background,
+    var(--color-gray-200)
+  );
+  color: var(--theme-inactive-folder-hover-text, var(--color-black));
+}
+</style>
