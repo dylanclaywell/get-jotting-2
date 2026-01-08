@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Menu } from '@tauri-apps/api/menu'
 import { message } from '@tauri-apps/plugin-dialog'
+import { listen, UnlistenFn } from '@tauri-apps/api/event'
 import { X, File as FileIcon } from 'lucide-vue-next'
 
 import Folder from '../components/folder.vue'
@@ -15,6 +16,8 @@ import { setCssThemeVariables } from '../utils/setCssThemeVariables'
 
 const files = ref<FileSummary[]>([])
 const folders = ref<FolderSummary[]>([])
+
+const unlistenThemeUpdated = ref<UnlistenFn | null>(null)
 
 const tabs = ref<FileType[]>([])
 const activeTab = ref<number | null>(null)
@@ -312,10 +315,22 @@ function onMouseLeave() {
   isResizingFileTree.value = false
 }
 
+function onThemeUpdated() {
+  loadTheme()
+}
+
 onMounted(async () => {
+  unlistenThemeUpdated.value = await listen('theme-updated', onThemeUpdated)
+
   await loadFiles()
   await loadFolders()
   await loadTheme()
+})
+
+onUnmounted(() => {
+  if (unlistenThemeUpdated.value) {
+    unlistenThemeUpdated.value()
+  }
 })
 </script>
 
@@ -328,6 +343,7 @@ onMounted(async () => {
       },
     ]"
     @keydown.ctrl.s.prevent="onSave"
+    @keydown.meta.s.prevent="onSave"
     @mousemove="onMouseMove"
     @mouseup="onMouseUp"
     @mouseleave="onMouseLeave"
@@ -335,7 +351,7 @@ onMounted(async () => {
     <div class="flex relative">
       <div
         ref="fileTreeRef"
-        class="filetree h-screen pt-12 border- border-gray-200 z-10 overflow-auto min-w-40 relative"
+        class="filetree h-screen pt-12 z-10 overflow-auto min-w-40 relative"
         @contextmenu="handleFileContextMenu"
       >
         <div v-for="fileOrFolder in filesAndFolders" class="w-full">
@@ -376,14 +392,14 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        class="absolute bg-blck -right-1 w-2 h-screen z-20 cursor-col-resize flex justify-center"
+        class="absolute -right-1 w-2 h-screen z-20 cursor-col-resize flex justify-center"
         @mousedown="onFileTreeMouseDown"
       >
-        <div class="bg-gray-200 w-px h-full"></div>
+        <div class="w-px h-full"></div>
       </div>
     </div>
     <div class="w-full h-screen bg-gray-30">
-      <div class="w-full shadow-md flex h-12 pl-2 pt-2">
+      <div class="w-full flex h-12 pl-2 pt-2">
         <div
           v-for="tab in tabs"
           :class="[

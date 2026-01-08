@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { BaseDirectory, readDir, readTextFile } from '@tauri-apps/plugin-fs'
+import {
+  BaseDirectory,
+  readDir,
+  readTextFile,
+  writeTextFile,
+} from '@tauri-apps/plugin-fs'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 
 import themeEditorColorPicker from '../components/themeEditorColorPicker.vue'
@@ -11,8 +16,10 @@ import { getCurrentTheme } from '../services/theme'
 import { Nullish } from '../types/nullish'
 import { buildTheme } from '../utils/buildTheme'
 import { ChevronDown } from 'lucide-vue-next'
+import { emitTo } from '@tauri-apps/api/event'
 
 const activeButton = ref('activeTab')
+const presetName = ref('')
 
 const selectRef = ref<HTMLSelectElement | null>(null)
 
@@ -89,7 +96,22 @@ async function onSave() {
     }
   }
 
+  await emitTo('main', 'theme-updated')
+
   currentWindow.close()
+}
+
+async function onSaveAsNewPreset() {
+  if (!presetName.value) return
+
+  const filename = `${presetName.value}.json`
+  const themeData = JSON.stringify(editingTheme.value, null, 2)
+  await writeTextFile(`themes/${filename}`, themeData, {
+    baseDir: BaseDirectory.AppLocalData,
+  })
+
+  await loadThemes()
+  selectedTheme.value = filename
 }
 
 function onThemeSelectClick(event: MouseEvent) {
@@ -155,16 +177,30 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div class="border-t flex justify-end gap-4 p-4">
-      <button class="hover:bg-blue-100 px-4 py-2 rounded-sm" @click="onCancel">
-        Cancel
-      </button>
-      <button
-        class="bg-blue-200 hover:bg-blue-100 px-4 py-2 rounded-sm"
-        @click="onSave"
-      >
-        Save
-      </button>
+    <div class="border-t flex justify-between items-center p-4">
+      <div class="flex items-center gap-2">
+        <input class="border rounded-sm" v-model="presetName" />
+        <button
+          class="hover:bg-blue-100 px-4 py-2 rounded-sm"
+          @click="onSaveAsNewPreset"
+        >
+          Save as New Preset
+        </button>
+      </div>
+      <div class="flex justify-end gap-4">
+        <button
+          class="hover:bg-blue-100 px-4 py-2 rounded-sm"
+          @click="onCancel"
+        >
+          Cancel
+        </button>
+        <button
+          class="bg-blue-200 hover:bg-blue-100 px-4 py-2 rounded-sm"
+          @click="onSave"
+        >
+          Save
+        </button>
+      </div>
     </div>
   </div>
 </template>

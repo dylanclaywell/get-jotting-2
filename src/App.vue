@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Menu, MenuItem, Submenu } from '@tauri-apps/api/menu'
+import {
+  Menu,
+  MenuItem,
+  Submenu,
+  PredefinedMenuItem,
+} from '@tauri-apps/api/menu'
+import { platform } from '@tauri-apps/plugin-os'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
 import {
@@ -28,6 +34,31 @@ async function setUpAppMenu() {
     ],
   })
 
+  const editSubmenu = await Submenu.new({
+    id: 'edit-submenu',
+    text: 'Edit',
+    items: [
+      await PredefinedMenuItem.new({
+        item: 'SelectAll',
+      }),
+      await PredefinedMenuItem.new({
+        item: 'Undo',
+      }),
+      await PredefinedMenuItem.new({
+        item: 'Redo',
+      }),
+      await PredefinedMenuItem.new({
+        item: 'Cut',
+      }),
+      await PredefinedMenuItem.new({
+        item: 'Copy',
+      }),
+      await PredefinedMenuItem.new({
+        item: 'Paste',
+      }),
+    ],
+  })
+
   const settingsSubmenu = await Submenu.new({
     id: 'settings-submenu',
     text: 'Settings',
@@ -49,10 +80,17 @@ async function setUpAppMenu() {
 
   const appMenu = await Menu.new({
     id: 'app-menu',
-    items: [fileSubmenu, settingsSubmenu],
+    items: [fileSubmenu, editSubmenu, settingsSubmenu],
   })
 
-  appMenu.setAsWindowMenu(currentWindow)
+  const os = await platform()
+
+  // MacOS uses a global menu for the app, while other OSes use window-specific menus
+  if (os === 'macos') {
+    appMenu.setAsAppMenu()
+  } else {
+    appMenu.setAsWindowMenu(currentWindow)
+  }
 }
 
 onMounted(async () => {

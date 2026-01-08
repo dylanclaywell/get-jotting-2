@@ -11,6 +11,8 @@
     "sql:allow-execute",
     "fs:default",
     "fs:allow-read-dir",
+    "fs:allow-write-file",
+    "fs:allow-write-text-file",
     {
       "identifier": "fs:scope",
       "allow": [{ "path": "$APPLOCALDATA" }, { "path": "$APPLOCALDATA/**" }]

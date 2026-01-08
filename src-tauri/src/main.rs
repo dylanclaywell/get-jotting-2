@@ -124,6 +124,7 @@ fn main() {
     ];
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .setup(|app| {
             // 1. Get paths for the Resource and AppLocalData directories
             let resource_path = app.path().resolve("themes", BaseDirectory::Resource)?;
