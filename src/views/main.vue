@@ -398,8 +398,8 @@ onUnmounted(() => {
         <div class="w-px h-full"></div>
       </div>
     </div>
-    <div class="w-full h-screen bg-gray-30">
-      <div class="w-full flex h-12 pl-2 pt-2">
+    <div class="file-view w-full h-screen">
+      <div v-if="activeTab" class="tabs w-full flex h-12 pl-2 pt-2">
         <div
           v-for="tab in tabs"
           :class="[
@@ -484,6 +484,14 @@ main {
 .tabChanged {
   border-bottom: 2px solid
     var(--theme-tab-changed-indicator, var(--color-yellow-500));
+}
+
+.tabs {
+  background: var(--theme-file-tree-background, var(--color-gray-100));
+}
+
+.file-view {
+  background: var(--theme-editor-background, var(--color-white));
 }
 
 textarea {

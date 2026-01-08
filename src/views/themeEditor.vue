@@ -17,6 +17,7 @@ import { Nullish } from '../types/nullish'
 import { buildTheme } from '../utils/buildTheme'
 import { ChevronDown } from 'lucide-vue-next'
 import { emitTo } from '@tauri-apps/api/event'
+import ThemeEditorPreview from '../components/themeEditorPreview.vue'
 
 const activeButton = ref('activeTab')
 const presetName = ref('')
@@ -101,7 +102,7 @@ async function onSave() {
   currentWindow.close()
 }
 
-async function onSaveAsNewPreset() {
+async function onSavePreset() {
   if (!presetName.value) return
 
   const filename = `${presetName.value}.json`
@@ -155,25 +156,32 @@ onMounted(async () => {
         Apply
       </button>
     </div>
-    <div class="flex h-full">
-      <div
-        class="flex flex-col items-start border-r overflow-y-auto h-[calc(100vh-7.5rem)]"
-      >
-        <div v-for="key in Object.keys(editingTheme)" :key="key" class="w-full">
-          <theme-editor-option
-            :text="themeOptionMapping[key as keyof Theme] ?? key"
-            :isActive="isActive(key)"
-            :optionKey="key"
-            @click="setButton(key)"
-          />
-        </div>
+    <div class="flex flex-col overflow-hidden">
+      <div class="w-full flex items-center justify-center py-8 border-b">
+        <theme-editor-preview :theme="editingTheme" />
       </div>
-      <div class="flex flex-col items-center flex-1 p-4">
-        <div v-for="key in Object.keys(editingTheme)">
-          <theme-editor-color-picker
-            v-if="isActive(key)"
-            v-model="editingTheme[key as keyof Theme]"
-          />
+      <div class="flex overflow-hidden">
+        <div class="flex flex-col items-start border-r overflow-y-auto h-full">
+          <div
+            v-for="key in Object.keys(editingTheme)"
+            :key="key"
+            class="w-full"
+          >
+            <theme-editor-option
+              :text="themeOptionMapping[key as keyof Theme] ?? key"
+              :isActive="isActive(key)"
+              :optionKey="key"
+              @click="setButton(key)"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col items-center flex-1 p-4 overflow-y-auto">
+          <div v-for="key in Object.keys(editingTheme)">
+            <theme-editor-color-picker
+              v-if="isActive(key)"
+              v-model="editingTheme[key as keyof Theme]"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -182,9 +190,9 @@ onMounted(async () => {
         <input class="border rounded-sm" v-model="presetName" />
         <button
           class="hover:bg-blue-100 px-4 py-2 rounded-sm"
-          @click="onSaveAsNewPreset"
+          @click="onSavePreset"
         >
-          Save as New Preset
+          Save Preset
         </button>
       </div>
       <div class="flex justify-end gap-4">

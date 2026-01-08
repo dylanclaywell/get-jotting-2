@@ -72,6 +72,7 @@ async function setUpAppMenu() {
             title: 'Theme Editor',
             width: 800,
             height: 600,
+            maximized: true,
           })
         },
       }),

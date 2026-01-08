@@ -5,13 +5,15 @@ const value = defineModel<string>()
 </script>
 
 <template>
-  <color-picker v-model="value" />
-  <label>
-    Color:&nbsp;
-    <input
-      class="mt-4 border rounded-sm"
-      placeholder="Hex, rgb"
-      v-model="value"
-    />
-  </label>
+  <div class="flex">
+    <label>
+      Color&nbsp;
+      <input
+        class="mt-4 border rounded-sm"
+        placeholder="Hex, rgb"
+        v-model="value"
+      />
+    </label>
+    <color-picker v-model="value" />
+  </div>
 </template>
