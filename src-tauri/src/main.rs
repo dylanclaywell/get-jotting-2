@@ -5,7 +5,7 @@ use std::fs;
 use tauri::path::BaseDirectory;
 use tauri::Manager;
 use tauri::WindowEvent;
-use tauri_plugin_sql::{Builder, Migration, MigrationKind};
+use tauri_plugin_sql::{Migration, MigrationKind};
 
 fn main() {
     let migrations = vec![
